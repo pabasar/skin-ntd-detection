@@ -1,18 +1,16 @@
-# Check TensorFlow version
+# Mount Google Drive
+from google.colab import drive
+drive.mount('/content/drive')
+
+# Check if a GPU is available for training the model
 import tensorflow as tf
 print(tf.__version__)
-
-# Check GPU availability
 device_name = tf.test.gpu_device_name()
 if device_name != '/device:GPU:0':
   raise SystemError('GPU device not found')
 print('Found GPU at: {}'.format(device_name))
 
-# Mount Google Drive
-from google.colab import drive
-drive.mount('/content/drive')
-
-# Import necessary libraries
+# Import required modules
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -43,8 +41,9 @@ def generate_gradcam(image_path):
     preds = model.predict(x)
     predicted_class = np.argmax(preds[0])
 
-    # Print the predicted class
-    print(f"Predicted class: {class_names[predicted_class]}")
+    # Print the predicted class and the prediction accuracy
+    print(f"Predicted disease: {class_names[predicted_class]}")
+    print(f"Probability: {round(preds[0][predicted_class]*100, 2)}%")
 
     # Get the last convolutional layer output and the predicted class output
     last_conv_layer = model.get_layer(last_conv_layer_name)
